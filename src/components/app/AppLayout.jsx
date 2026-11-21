@@ -10,31 +10,31 @@ export const AppLayout = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#05070A] text-slate-100 flex relative overflow-x-hidden bg-grain">
-      {/* Subtle orbs */}
-      <BackgroundOrbs className="opacity-40" />
+    <div className="h-screen w-screen overflow-hidden bg-[#05070A] text-slate-100 flex relative bg-grain">
+      {/* Subtle background ambient orbs */}
+      <BackgroundOrbs className="opacity-30" />
 
-      {/* Sidebar */}
+      {/* Fixed Sidebar: Pinned to the left and never scrolls with page */}
       <AppSidebar
         isMobileOpen={isMobileSidebarOpen}
         setIsMobileOpen={setIsMobileSidebarOpen}
       />
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 min-h-screen relative z-10">
-        {/* Top Header */}
+      {/* Main Content Area: Independent smooth scrolling while sidebar stays fixed */}
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto overflow-x-hidden relative z-10 scroll-smooth">
+        {/* Sticky App Header */}
         <AppNavbar
           onOpenMobileSidebar={() => setIsMobileSidebarOpen(true)}
           onOpenSearch={() => setIsSearchOpen(true)}
         />
 
-        {/* Dynamic Route Pages */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+        {/* Dynamic Route Content */}
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto pb-16">
           <Outlet />
         </main>
       </div>
 
-      {/* Global Search Palette Modal */}
+      {/* Global Search Palette Modal (Cmd+K) */}
       <GlobalSearchModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
