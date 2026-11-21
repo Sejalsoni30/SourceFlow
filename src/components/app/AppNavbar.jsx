@@ -9,7 +9,8 @@ import {
   Command,
   Plus,
   ShieldCheck,
-  CheckCircle2
+  CheckCircle2,
+  X
 } from 'lucide-react';
 
 export const AppNavbar = ({ onOpenMobileSidebar, onOpenSearch }) => {
@@ -32,20 +33,23 @@ export const AppNavbar = ({ onOpenMobileSidebar, onOpenSearch }) => {
   const currentTitle = routeNames[location.pathname] || 'Workspace';
 
   return (
-    <header className="sticky top-0 z-30 h-16 bg-[#05070A]/80 backdrop-blur-xl border-b border-white/[0.08] px-4 sm:px-6 flex items-center justify-between">
+    <header className="sticky top-0 z-30 h-16 bg-[#05070A]/85 backdrop-blur-xl border-b border-white/[0.08] px-3 sm:px-6 flex items-center justify-between">
       {/* Left Breadcrumb & Mobile Menu */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
         <button
           onClick={onOpenMobileSidebar}
-          className="md:hidden p-2 rounded-xl bg-white/[0.04] border border-white/10 text-slate-300 hover:text-white"
+          className="md:hidden p-2 rounded-xl bg-white/[0.04] border border-white/10 text-slate-300 hover:text-white shrink-0"
+          aria-label="Open Navigation Menu"
         >
           <Menu className="w-4 h-4" />
         </button>
 
-        <div className="flex items-center gap-2 text-xs">
+        <div className="flex items-center gap-1.5 sm:gap-2 text-xs min-w-0">
           <span className="text-slate-500 hidden sm:inline">SourceFlow</span>
           <span className="text-slate-600 hidden sm:inline">/</span>
-          <span className="font-medium text-white tracking-wide">{currentTitle}</span>
+          <span className="font-medium text-white tracking-wide truncate max-w-[170px] sm:max-w-none">
+            {currentTitle}
+          </span>
         </div>
       </div>
 
@@ -66,7 +70,7 @@ export const AppNavbar = ({ onOpenMobileSidebar, onOpenSearch }) => {
       </div>
 
       {/* Right Controls */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
         {/* System Health Badge */}
         <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00E5A0]/10 border border-[#00E5A0]/20 text-[11px] font-mono text-[#00E5A0]">
           <span className="w-1.5 h-1.5 rounded-full bg-[#00E5A0] animate-pulse" />
@@ -77,6 +81,7 @@ export const AppNavbar = ({ onOpenMobileSidebar, onOpenSearch }) => {
         <button
           onClick={onOpenSearch}
           className="lg:hidden p-2 rounded-full bg-white/[0.04] border border-white/10 text-slate-300 hover:text-white"
+          aria-label="Search"
         >
           <Search className="w-4 h-4" />
         </button>
@@ -86,6 +91,7 @@ export const AppNavbar = ({ onOpenMobileSidebar, onOpenSearch }) => {
           <button
             onClick={() => setNotificationOpen(!notificationOpen)}
             className="relative p-2 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-slate-300 hover:text-white transition-colors"
+            aria-label="Notifications"
           >
             <Bell className="w-4 h-4" />
             <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-rose-500 animate-ping" />
@@ -94,48 +100,62 @@ export const AppNavbar = ({ onOpenMobileSidebar, onOpenSearch }) => {
 
           {/* Quick Notification Dropdown */}
           {notificationOpen && (
-            <div className="absolute right-0 top-12 w-80 p-4 rounded-2xl bg-[#090D14]/95 backdrop-blur-2xl border border-white/10 shadow-2xl z-50 animate-in fade-in slide-in-from-top-2">
-              <div className="flex items-center justify-between mb-3 pb-2 border-b border-white/10 text-xs font-mono">
-                <span className="font-semibold text-white">Live Disruption Radar</span>
-                <span className="text-rose-400">2 Critical</span>
-              </div>
-              <div className="space-y-2 text-xs">
-                <div
-                  onClick={() => {
-                    setNotificationOpen(false);
-                    navigate('/app/risk');
-                  }}
-                  className="p-2.5 rounded-xl bg-rose-950/20 border border-rose-500/30 hover:border-rose-500/60 cursor-pointer transition-all"
-                >
-                  <div className="font-semibold text-rose-300">Port of Yantian Congestion</div>
-                  <div className="text-[11px] text-slate-400 mt-0.5">
-                    +7 days transit delay on Shenzen Rapid Mold POs.
+            <>
+              <div
+                className="fixed inset-0 z-40"
+                onClick={() => setNotificationOpen(false)}
+              />
+              <div className="absolute right-0 top-12 w-[calc(100vw-2rem)] max-w-sm p-4 rounded-2xl bg-[#090D14]/95 backdrop-blur-2xl border border-white/15 shadow-2xl z-50 animate-in fade-in slide-in-from-top-2">
+                <div className="flex items-center justify-between mb-3 pb-2 border-b border-white/10 text-xs font-mono">
+                  <span className="font-semibold text-white">Live Disruption Radar</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-rose-400">2 Critical</span>
+                    <button
+                      onClick={() => setNotificationOpen(false)}
+                      className="p-1 rounded-md text-slate-400 hover:text-white"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 </div>
+                <div className="space-y-2 text-xs">
+                  <div
+                    onClick={() => {
+                      setNotificationOpen(false);
+                      navigate('/app/risk');
+                    }}
+                    className="p-2.5 rounded-xl bg-rose-950/20 border border-rose-500/30 hover:border-rose-500/60 cursor-pointer transition-all"
+                  >
+                    <div className="font-semibold text-rose-300">Port of Yantian Congestion</div>
+                    <div className="text-[11px] text-slate-400 mt-0.5">
+                      +7 days transit delay on Shenzen Rapid Mold POs.
+                    </div>
+                  </div>
 
-                <div
+                  <div
+                    onClick={() => {
+                      setNotificationOpen(false);
+                      navigate('/app/risk');
+                    }}
+                    className="p-2.5 rounded-xl bg-amber-950/20 border border-amber-500/30 hover:border-amber-500/60 cursor-pointer transition-all"
+                  >
+                    <div className="font-semibold text-amber-300">Raw Material Surcharge</div>
+                    <div className="text-[11px] text-slate-400 mt-0.5">
+                      Bauxite spot price +18%. Action recommended.
+                    </div>
+                  </div>
+                </div>
+                <button
                   onClick={() => {
                     setNotificationOpen(false);
                     navigate('/app/risk');
                   }}
-                  className="p-2.5 rounded-xl bg-amber-950/20 border border-amber-500/30 hover:border-amber-500/60 cursor-pointer transition-all"
+                  className="w-full mt-3 text-center text-xs font-mono text-[#00E5A0] hover:underline"
                 >
-                  <div className="font-semibold text-amber-300">Raw Material Surcharge</div>
-                  <div className="text-[11px] text-slate-400 mt-0.5">
-                    Bauxite spot price +18%. Action recommended.
-                  </div>
-                </div>
+                  Open Full Risk Center →
+                </button>
               </div>
-              <button
-                onClick={() => {
-                  setNotificationOpen(false);
-                  navigate('/app/risk');
-                }}
-                className="w-full mt-3 text-center text-xs font-mono text-[#00E5A0] hover:underline"
-              >
-                Open Full Risk Center →
-              </button>
-            </div>
+            </>
           )}
         </div>
 
@@ -145,7 +165,7 @@ export const AppNavbar = ({ onOpenMobileSidebar, onOpenSearch }) => {
           size="sm"
           onClick={() => navigate('/app/optimizer')}
           iconComponent={Plus}
-          className="shadow-sm text-xs"
+          className="shadow-sm text-xs px-2.5 py-1.5 sm:px-4 sm:py-2"
         >
           <span className="hidden sm:inline">New Optimization</span>
           <span className="sm:hidden">Optimize</span>

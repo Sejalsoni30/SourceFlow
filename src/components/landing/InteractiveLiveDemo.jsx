@@ -107,7 +107,7 @@ export const InteractiveLiveDemo = () => {
       weights: { price: 40, delivery: 25, quality: 15, reliability: 10, risk: 10 },
     },
     {
-      label: 'Ultra Cost-Cutter',
+      label: 'Cost-Cutter',
       weights: { price: 80, delivery: 5, quality: 5, reliability: 5, risk: 5 },
     },
     {
@@ -115,7 +115,7 @@ export const InteractiveLiveDemo = () => {
       weights: { price: 10, delivery: 70, quality: 10, reliability: 5, risk: 5 },
     },
     {
-      label: 'Zero-Defect Quality',
+      label: 'Zero-Defect',
       weights: { price: 10, delivery: 10, quality: 55, reliability: 20, risk: 5 },
     },
   ];
@@ -147,7 +147,7 @@ export const InteractiveLiveDemo = () => {
   const top2 = rankedSuppliers[1];
 
   return (
-    <section id="live-demo" className="relative py-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section id="live-demo" className="relative py-20 sm:py-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <SectionHeading
         badge="Live Interactive Playground"
         title={
@@ -160,15 +160,15 @@ export const InteractiveLiveDemo = () => {
       />
 
       {/* Preset Pills */}
-      <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
-        <span className="text-xs font-mono text-slate-400 mr-2 flex items-center gap-1">
-          <Sparkles className="w-3.5 h-3.5 text-[#00E5A0]" /> Quick Presets:
+      <div className="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-2">
+        <span className="text-xs font-mono text-slate-400 mr-1 sm:mr-2 flex items-center gap-1">
+          <Sparkles className="w-3.5 h-3.5 text-[#00E5A0]" /> Presets:
         </span>
         {presets.map((preset) => (
           <button
             key={preset.label}
             onClick={() => setWeights(preset.weights)}
-            className="text-xs px-3.5 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/20 text-slate-300 hover:text-white transition-all font-medium"
+            className="text-xs px-3 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/20 text-slate-300 hover:text-white transition-all font-medium"
           >
             {preset.label}
           </button>
@@ -184,20 +184,20 @@ export const InteractiveLiveDemo = () => {
         </button>
       </div>
 
-      <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="mt-10 sm:mt-12 grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
         {/* Left Column: Sliders (5 cols) */}
         <div className="lg:col-span-5">
-          <GlassCard glowColor="cyan" className="p-6 sm:p-7 space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
+          <GlassCard glowColor="cyan" className="p-5 sm:p-7 space-y-5 sm:space-y-6">
+            <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
                 <Sliders className="w-4 h-4 text-[#22D3EE]" />
-                <h3 className="text-base font-semibold text-white">Priority Weightings</h3>
+                <h3 className="text-sm sm:text-base font-semibold text-white">Priority Weightings</h3>
               </div>
               <span className="text-xs font-mono text-slate-400">Total: 100%</span>
             </div>
 
             {/* Slider 1: Price */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <div className="flex justify-between text-xs">
                 <span className="text-slate-300 font-medium">Price Sensitivity</span>
                 <span className="font-mono text-[#00E5A0] font-bold">{weights.price}%</span>
@@ -214,7 +214,7 @@ export const InteractiveLiveDemo = () => {
             </div>
 
             {/* Slider 2: Delivery Speed */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <div className="flex justify-between text-xs">
                 <span className="text-slate-300 font-medium">Delivery Speed / Lead Time</span>
                 <span className="font-mono text-[#22D3EE] font-bold">{weights.delivery}%</span>
@@ -227,11 +227,11 @@ export const InteractiveLiveDemo = () => {
                 onChange={(e) => setWeights({ ...weights, delivery: Number(e.target.value) })}
                 className="w-full accent-[#22D3EE] h-1.5 bg-white/10 rounded-lg cursor-pointer"
               />
-              <div className="text-[11px] text-slate-400">Prioritizes 2-5 day domestic / express suppliers</div>
+              <div className="text-[11px] text-slate-400">Prioritizes 2-5 day domestic/express vendors</div>
             </div>
 
             {/* Slider 3: Quality Standard */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <div className="flex justify-between text-xs">
                 <span className="text-slate-300 font-medium">Quality & Defect SLA</span>
                 <span className="font-mono text-[#8B5CF6] font-bold">{weights.quality}%</span>
@@ -244,11 +244,11 @@ export const InteractiveLiveDemo = () => {
                 onChange={(e) => setWeights({ ...weights, quality: Number(e.target.value) })}
                 className="w-full accent-[#8B5CF6] h-1.5 bg-white/10 rounded-lg cursor-pointer"
               />
-              <div className="text-[11px] text-slate-400">Penalizes suppliers with &gt;0.1% defect rate</div>
+              <div className="text-[11px] text-slate-400">Penalizes vendors with &gt;0.1% defect rate</div>
             </div>
 
             {/* Slider 4: Reliability */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <div className="flex justify-between text-xs">
                 <span className="text-slate-300 font-medium">Historical Reliability</span>
                 <span className="font-mono text-white font-bold">{weights.reliability}%</span>
@@ -265,7 +265,7 @@ export const InteractiveLiveDemo = () => {
             </div>
 
             {/* Slider 5: Risk Tolerance */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <div className="flex justify-between text-xs">
                 <span className="text-slate-300 font-medium">Risk Buffer / Port Hedge</span>
                 <span className="font-mono text-amber-400 font-bold">{weights.risk}%</span>
@@ -286,7 +286,7 @@ export const InteractiveLiveDemo = () => {
               <div className="flex items-center gap-1.5 text-[#00E5A0] font-mono text-[11px] mb-1">
                 <Sparkles className="w-3.5 h-3.5" /> Dynamic AI Split Recommendation:
               </div>
-              <p className="text-slate-300 leading-relaxed font-sans">
+              <p className="text-slate-300 leading-relaxed font-sans text-xs">
                 Split: <span className="font-bold text-white">60% {top1.name}</span> +{' '}
                 <span className="font-bold text-white">40% {top2.name}</span>. This captures maximum
                 score optimization while guarding against single-point failure.
@@ -296,10 +296,10 @@ export const InteractiveLiveDemo = () => {
         </div>
 
         {/* Right Column: Real-time Reordered Leaderboard (7 cols) */}
-        <div className="lg:col-span-7 space-y-3.5">
-          <div className="flex items-center justify-between text-xs text-slate-400 px-2 font-mono">
+        <div className="lg:col-span-7 space-y-3">
+          <div className="flex items-center justify-between text-xs text-slate-400 px-2 font-mono flex-wrap gap-1">
             <span>REAL-TIME LEADERBOARD ({rankedSuppliers.length} VENDORS)</span>
-            <span className="text-[#00E5A0]">Auto-calculated via FastAPI Optimizer</span>
+            <span className="text-[#00E5A0] text-[11px]">FastAPI v2.4</span>
           </div>
 
           {rankedSuppliers.map((supplier, index) => {
@@ -310,7 +310,7 @@ export const InteractiveLiveDemo = () => {
               <div
                 key={supplier.id}
                 className={`
-                  p-4 rounded-2xl border backdrop-blur-xl transition-all duration-500 ease-out flex items-center justify-between gap-4
+                  p-3.5 sm:p-4 rounded-2xl border backdrop-blur-xl transition-all duration-500 ease-out flex items-center justify-between gap-3
                   ${
                     isRank1
                       ? 'bg-gradient-to-r from-emerald-950/40 via-white/[0.04] to-white/[0.02] border-[#00E5A0]/40 shadow-[0_8px_30px_rgba(0,229,160,0.15)] scale-[1.01]'
@@ -321,9 +321,9 @@ export const InteractiveLiveDemo = () => {
                 `}
               >
                 {/* Rank & Identity */}
-                <div className="flex items-center gap-3 min-w-0">
+                <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
                   <div
-                    className={`w-7 h-7 rounded-full flex items-center justify-center font-mono font-bold text-xs shrink-0 ${
+                    className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center font-mono font-bold text-xs shrink-0 ${
                       isRank1
                         ? 'bg-[#00E5A0] text-black shadow-[0_0_12px_#00E5A0]'
                         : isRank2
@@ -334,47 +334,47 @@ export const InteractiveLiveDemo = () => {
                     #{index + 1}
                   </div>
 
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <h4 className="text-sm font-semibold text-white truncate">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                      <h4 className="text-xs sm:text-sm font-semibold text-white truncate max-w-[160px] sm:max-w-none">
                         {supplier.name}
                       </h4>
                       {isRank1 && (
-                        <span className="hidden sm:inline-flex px-2 py-0.5 rounded-full bg-[#00E5A0]/20 text-[#00E5A0] border border-[#00E5A0]/30 text-[10px] font-mono">
-                          Primary (60%)
+                        <span className="px-1.5 py-0.5 rounded-full bg-[#00E5A0]/20 text-[#00E5A0] border border-[#00E5A0]/30 text-[9px] sm:text-[10px] font-mono shrink-0">
+                          60%
                         </span>
                       )}
                       {isRank2 && (
-                        <span className="hidden sm:inline-flex px-2 py-0.5 rounded-full bg-[#22D3EE]/20 text-[#22D3EE] border border-[#22D3EE]/30 text-[10px] font-mono">
-                          Buffer (40%)
+                        <span className="px-1.5 py-0.5 rounded-full bg-[#22D3EE]/20 text-[#22D3EE] border border-[#22D3EE]/30 text-[9px] sm:text-[10px] font-mono shrink-0">
+                          40%
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-3 text-xs text-slate-400 mt-0.5">
+                    <div className="flex items-center gap-2 text-[11px] text-slate-400 mt-0.5 font-mono truncate">
                       <span>{supplier.country}</span>
                       <span>•</span>
-                      <span>{supplier.leadDays} days lead</span>
+                      <span>{supplier.leadDays}d lead</span>
                       <span>•</span>
-                      <span className="font-mono text-slate-300">{supplier.unitPrice}/u</span>
+                      <span className="text-slate-300">{supplier.unitPrice}/u</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Score Ring & Live Score */}
-                <div className="flex items-center gap-3 shrink-0">
+                <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                   <div className="text-right hidden sm:block">
-                    <div className="text-[10px] font-mono uppercase text-slate-400">Match Fit</div>
+                    <div className="text-[10px] font-mono uppercase text-slate-400">Match</div>
                     <div className="text-sm font-mono font-bold text-white">
                       {supplier.liveScore}%
                     </div>
                   </div>
-                  <ScoreRing score={supplier.liveScore} size={46} strokeWidth={4} />
+                  <ScoreRing score={supplier.liveScore} size={42} strokeWidth={4} />
                 </div>
               </div>
             );
           })}
 
-          <div className="pt-4 flex items-center justify-between">
+          <div className="pt-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
             <span className="text-xs text-slate-400">
               Ready to test with your actual product SKUs and vendor rate cards?
             </span>
@@ -382,6 +382,7 @@ export const InteractiveLiveDemo = () => {
               variant="primary"
               size="sm"
               onClick={() => navigate('/app/optimizer')}
+              className="w-full sm:w-auto"
             >
               Open Full Studio
             </PillButton>

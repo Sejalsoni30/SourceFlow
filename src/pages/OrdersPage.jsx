@@ -122,22 +122,22 @@ export const OrdersPage = () => {
             <GlassCard
               key={order.id}
               hoverEffect={false}
-              className="p-6 transition-all border-white/10 hover:border-white/20"
+              className="p-4 sm:p-6 transition-all border-white/10 hover:border-white/20"
             >
               {/* Order Header Summary */}
               <div
                 onClick={() => toggleExpand(order.id)}
-                className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 cursor-pointer"
+                className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4 cursor-pointer"
               >
-                <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-2xl bg-white/[0.04] border border-white/10 text-[#00E5A0] shrink-0">
-                    <Split className="w-5 h-5" />
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <div className="p-2.5 sm:p-3 rounded-2xl bg-white/[0.04] border border-white/10 text-[#00E5A0] shrink-0">
+                    <Split className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
                   <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-mono font-bold text-base text-white">{order.id}</span>
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <span className="font-mono font-bold text-sm sm:text-base text-white">{order.id}</span>
                       <span
-                        className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${
+                        className={`text-[9px] sm:text-[10px] font-mono px-2 py-0.5 rounded-full ${
                           order.status === 'Delivered'
                             ? 'bg-emerald-500/20 text-[#00E5A0] border border-emerald-500/30'
                             : order.status === 'In Transit'
@@ -148,30 +148,30 @@ export const OrdersPage = () => {
                         {order.status}
                       </span>
                     </div>
-                    <h3 className="text-sm font-semibold text-white">{order.productName}</h3>
-                    <div className="text-xs text-slate-400 font-mono mt-0.5">
+                    <h3 className="text-xs sm:text-sm font-semibold text-white">{order.productName}</h3>
+                    <div className="text-[11px] sm:text-xs text-slate-400 font-mono mt-0.5">
                       {order.totalUnits.toLocaleString()} units • Dispatched {order.date}
                     </div>
                   </div>
                 </div>
 
                 {/* Financial Summary */}
-                <div className="flex items-center gap-6 text-right">
+                <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-6 pt-3 sm:pt-0 border-t sm:border-t-0 border-white/[0.06] w-full sm:w-auto text-left sm:text-right">
                   <div>
                     <div className="text-[10px] font-mono uppercase text-slate-400">Total Spend</div>
-                    <div className="text-base font-mono font-bold text-white">
+                    <div className="text-sm sm:text-base font-mono font-bold text-white">
                       ${order.totalSpend.toLocaleString()}
                     </div>
                   </div>
 
                   <div>
                     <div className="text-[10px] font-mono uppercase text-slate-400">Net Savings</div>
-                    <div className="text-base font-mono font-bold text-[#00E5A0]">
+                    <div className="text-sm sm:text-base font-mono font-bold text-[#00E5A0]">
                       -${order.savings.toLocaleString()} ({order.savingsPercent}%)
                     </div>
                   </div>
 
-                  <button className="p-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-400 hover:text-white transition-colors">
+                  <button className="p-1.5 sm:p-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-400 hover:text-white transition-colors">
                     {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </button>
                 </div>

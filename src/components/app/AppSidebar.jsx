@@ -192,7 +192,7 @@ export const AppSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
             className="fixed inset-0 bg-black/70 backdrop-blur-sm"
             onClick={() => setIsMobileOpen(false)}
           />
-          <div className="relative w-72 h-full z-10 animate-in slide-in-from-left duration-200">
+          <div className="relative w-72 max-w-[85vw] h-full z-10 animate-in slide-in-from-left duration-200">
             {sidebarContent}
           </div>
         </div>

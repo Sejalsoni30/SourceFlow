@@ -334,54 +334,54 @@ export const OptimizerPage = () => {
           {!loading && optimizationResult && (
             <>
               {/* Financial Metrics Strip */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <GlassCard glowColor="emerald" hoverEffect={false} className="p-4">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
+                <GlassCard glowColor="emerald" hoverEffect={false} className="p-3.5 sm:p-4">
                   <div className="text-[10px] font-mono uppercase text-slate-400">Total Spend</div>
-                  <div className="text-2xl font-mono font-bold text-white mt-1">
+                  <div className="text-xl sm:text-2xl font-mono font-bold text-white mt-1">
                     ${optimizationResult.totalCost.toLocaleString()}
                   </div>
-                  <div className="text-[11px] text-[#00E5A0] mt-1 font-mono">
+                  <div className="text-[10px] sm:text-[11px] text-[#00E5A0] mt-1 font-mono">
                     -${optimizationResult.savings.toLocaleString()} saved
                   </div>
                 </GlassCard>
 
-                <GlassCard glowColor="cyan" hoverEffect={false} className="p-4">
+                <GlassCard glowColor="cyan" hoverEffect={false} className="p-3.5 sm:p-4">
                   <div className="text-[10px] font-mono uppercase text-slate-400">Cost Savings</div>
-                  <div className="text-2xl font-mono font-bold text-[#00E5A0] mt-1">
+                  <div className="text-xl sm:text-2xl font-mono font-bold text-[#00E5A0] mt-1">
                     {optimizationResult.savingsPercent}%
                   </div>
-                  <div className="text-[11px] text-slate-400 mt-1">
+                  <div className="text-[10px] sm:text-[11px] text-slate-400 mt-1">
                     vs single vendor
                   </div>
                 </GlassCard>
 
-                <GlassCard glowColor="violet" hoverEffect={false} className="p-4">
+                <GlassCard glowColor="violet" hoverEffect={false} className="p-3.5 sm:p-4">
                   <div className="text-[10px] font-mono uppercase text-slate-400">Blended Transit</div>
-                  <div className="text-2xl font-mono font-bold text-white mt-1">
+                  <div className="text-xl sm:text-2xl font-mono font-bold text-white mt-1">
                     {optimizationResult.blendedLeadTimeDays}d
                   </div>
-                  <div className="text-[11px] text-[#22D3EE] mt-1">
+                  <div className="text-[10px] sm:text-[11px] text-[#22D3EE] mt-1">
                     Within deadline
                   </div>
                 </GlassCard>
 
-                <GlassCard glowColor="emerald" hoverEffect={false} className="p-4">
+                <GlassCard glowColor="emerald" hoverEffect={false} className="p-3.5 sm:p-4">
                   <div className="text-[10px] font-mono uppercase text-slate-400">Risk Resilience</div>
-                  <div className="text-2xl font-mono font-bold text-white mt-1">
+                  <div className="text-xl sm:text-2xl font-mono font-bold text-white mt-1">
                     {optimizationResult.riskScore}/100
                   </div>
-                  <div className="text-[11px] text-emerald-400 mt-1 font-mono">
+                  <div className="text-[10px] sm:text-[11px] text-emerald-400 mt-1 font-mono">
                     0% single point
                   </div>
                 </GlassCard>
               </div>
 
               {/* Visual Split Donut & Breakdown Card */}
-              <GlassCard glowColor="emerald" className="p-6">
+              <GlassCard glowColor="emerald" className="p-4 sm:p-6">
                 <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/[0.08]">
                   <div className="flex items-center gap-2">
                     <PieChart className="w-4 h-4 text-[#00E5A0]" />
-                    <h3 className="text-base font-semibold text-white">Recommended Allocation Split</h3>
+                    <h3 className="text-sm sm:text-base font-semibold text-white">Recommended Allocation Split</h3>
                   </div>
                   <span className="text-xs font-mono text-[#00E5A0] bg-[#00E5A0]/10 px-2 py-0.5 rounded">
                     Pareto Efficient
@@ -389,7 +389,7 @@ export const OptimizerPage = () => {
                 </div>
 
                 {/* Progress bar visual split */}
-                <div className="w-full h-4 rounded-full overflow-hidden flex bg-white/10 mb-4 shadow-inner">
+                <div className="w-full h-3.5 sm:h-4 rounded-full overflow-hidden flex bg-white/10 mb-4 shadow-inner">
                   {optimizationResult.split.map((item, idx) => (
                     <div
                       key={item.supplierId}
@@ -404,8 +404,8 @@ export const OptimizerPage = () => {
                 </div>
 
                 {/* Split Table */}
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs">
+                <div className="overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+                  <table className="w-full text-left text-xs min-w-[560px]">
                     <thead>
                       <tr className="border-b border-white/[0.06] text-slate-400 font-mono">
                         <th className="pb-2 font-medium">Supplier</th>
@@ -421,8 +421,8 @@ export const OptimizerPage = () => {
                       {optimizationResult.split.map((s) => (
                         <tr key={s.supplierId} className="hover:bg-white/[0.02]">
                           <td className="py-3 font-semibold text-white flex items-center gap-2">
-                            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: s.color }} />
-                            <span>{s.name}</span>
+                            <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: s.color }} />
+                            <span className="truncate">{s.name}</span>
                           </td>
                           <td className="py-3 font-mono font-bold text-white">{s.sharePercent}%</td>
                           <td className="py-3 font-mono">{s.units.toLocaleString()}</td>
@@ -442,7 +442,7 @@ export const OptimizerPage = () => {
               </GlassCard>
 
               {/* Explainable AI Plain-Language Report */}
-              <GlassCard glowColor="violet" className="p-6 space-y-4">
+              <GlassCard glowColor="violet" className="p-4 sm:p-6 space-y-4">
                 <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
                   <div className="flex items-center gap-2 text-white">
                     <Sparkles className="w-4 h-4 text-[#8B5CF6]" />

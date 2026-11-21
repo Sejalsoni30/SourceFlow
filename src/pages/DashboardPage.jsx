@@ -61,11 +61,11 @@ export const DashboardPage = () => {
   const chartData = metrics?.history || [];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Top Greeting & Action Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-tight">
             Procurement Intelligence & Multi-Sourcing
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
@@ -73,18 +73,20 @@ export const DashboardPage = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
           <PillButton
             variant="secondary"
             size="sm"
             onClick={() => navigate('/app/simulator')}
+            className="flex-1 sm:flex-initial"
           >
-            Run What-If Test
+            What-If Test
           </PillButton>
           <PillButton
             variant="primary"
             size="sm"
             onClick={() => navigate('/app/optimizer')}
+            className="flex-1 sm:flex-initial"
           >
             Optimize New Order
           </PillButton>
@@ -92,7 +94,7 @@ export const DashboardPage = () => {
       </div>
 
       {/* 4 Animated KPI Stat Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6">
         <StatCard
           title="Total Sourcing Saved"
           value={metrics ? metrics.kpis.totalSavingsYTD : 284500}
@@ -102,6 +104,7 @@ export const DashboardPage = () => {
           changeLabel="vs single-vendor baseline"
           glowColor="emerald"
           icon={TrendingDown}
+          className="p-4 sm:p-6"
         />
 
         <StatCard
@@ -113,6 +116,7 @@ export const DashboardPage = () => {
           changeLabel="100% audited"
           glowColor="cyan"
           icon={Users2}
+          className="p-4 sm:p-6"
         />
 
         <StatCard
@@ -124,6 +128,7 @@ export const DashboardPage = () => {
           changeLabel="on-time delivery SLA"
           glowColor="violet"
           icon={Clock}
+          className="p-4 sm:p-6"
         />
 
         <StatCard
@@ -135,23 +140,24 @@ export const DashboardPage = () => {
           changeLabel="2 mitigations queued"
           glowColor="emerald"
           icon={ShieldAlert}
+          className="p-4 sm:p-6"
         />
       </div>
 
       {/* Main Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Spend & Savings Trajectory (Area Chart 7 cols) */}
-        <GlassCard glowColor="emerald" className="lg:col-span-7 p-6">
-          <div className="flex items-center justify-between mb-6">
+        <GlassCard glowColor="emerald" className="lg:col-span-7 p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <div>
-              <h3 className="text-base font-semibold text-white">Spend Trajectory & Net Savings</h3>
+              <h3 className="text-sm sm:text-base font-semibold text-white">Spend Trajectory & Net Savings</h3>
               <p className="text-xs text-slate-400">
                 Single-supplier worst-case quotation vs. SourceFlow multi-vendor realized spend ($k)
               </p>
             </div>
-            <div className="flex items-center gap-4 text-xs font-mono">
+            <div className="flex items-center gap-3 sm:gap-4 text-xs font-mono">
               <span className="flex items-center gap-1.5 text-slate-400">
-                <span className="w-2.5 h-2.5 rounded-full bg-white/20" /> Single Supplier
+                <span className="w-2.5 h-2.5 rounded-full bg-white/20" /> Baseline
               </span>
               <span className="flex items-center gap-1.5 text-[#00E5A0]">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#00E5A0]" /> SourceFlow
@@ -159,9 +165,9 @@ export const DashboardPage = () => {
             </div>
           </div>
 
-          <div className="h-64 w-full">
+          <div className="h-56 sm:h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -24, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorSourceflow" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="5%" stopColor="#00E5A0" stopOpacity={0.4} />
@@ -206,21 +212,21 @@ export const DashboardPage = () => {
             </ResponsiveContainer>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-white/[0.08] flex items-center justify-between text-xs text-slate-400">
-            <span>Cumulative 6-month alpha: <span className="text-[#00E5A0] font-mono font-bold">+$479,000</span></span>
+          <div className="mt-4 pt-3 border-t border-white/[0.08] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 text-xs text-slate-400">
+            <span>Cumulative alpha: <span className="text-[#00E5A0] font-mono font-bold">+$479,000</span></span>
             <span className="font-mono text-[11px] text-[#00E5A0]">Validated against ERP ledger</span>
           </div>
         </GlassCard>
 
         {/* AI Autonomous Insights Panel (5 cols) */}
-        <GlassCard glowColor="violet" className="lg:col-span-5 p-6 flex flex-col justify-between">
+        <GlassCard glowColor="violet" className="lg:col-span-5 p-4 sm:p-6 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <span className="p-2 rounded-xl bg-[#8B5CF6]/10 text-[#8B5CF6] border border-[#8B5CF6]/20">
                   <Sparkles className="w-4 h-4" />
                 </span>
-                <h3 className="text-base font-semibold text-white">AI Autonomous Recommendations</h3>
+                <h3 className="text-sm sm:text-base font-semibold text-white">AI Autonomous Recommendations</h3>
               </div>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#8B5CF6]/20 text-[#8B5CF6]">
                 3 Actions
@@ -233,12 +239,12 @@ export const DashboardPage = () => {
 
             <div className="space-y-3">
               {/* Insight 1 */}
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-[#00E5A0]/40 transition-all cursor-pointer">
+              <div className="p-3 sm:p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-[#00E5A0]/40 transition-all cursor-pointer">
                 <div className="flex items-center justify-between text-xs font-semibold text-white mb-1">
-                  <span className="flex items-center gap-1.5 text-[#00E5A0]">
-                    <TrendingDown className="w-3.5 h-3.5" /> Shift 20% of Order #9821
+                  <span className="flex items-center gap-1.5 text-[#00E5A0] truncate">
+                    <TrendingDown className="w-3.5 h-3.5 shrink-0" /> Shift 20% of Order #9821
                   </span>
-                  <span className="text-[10px] font-mono text-[#00E5A0] bg-[#00E5A0]/10 px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-mono text-[#00E5A0] bg-[#00E5A0]/10 px-2 py-0.5 rounded shrink-0">
                     Save $4.8k
                   </span>
                 </div>
@@ -248,12 +254,12 @@ export const DashboardPage = () => {
               </div>
 
               {/* Insight 2 */}
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-amber-500/40 transition-all cursor-pointer">
+              <div className="p-3 sm:p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-amber-500/40 transition-all cursor-pointer">
                 <div className="flex items-center justify-between text-xs font-semibold text-white mb-1">
-                  <span className="flex items-center gap-1.5 text-amber-400">
-                    <AlertTriangle className="w-3.5 h-3.5" /> Bauxite Price Hedge Alert
+                  <span className="flex items-center gap-1.5 text-amber-400 truncate">
+                    <AlertTriangle className="w-3.5 h-3.5 shrink-0" /> Bauxite Price Hedge Alert
                   </span>
-                  <span className="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded shrink-0">
                     Action Req.
                   </span>
                 </div>
@@ -263,12 +269,12 @@ export const DashboardPage = () => {
               </div>
 
               {/* Insight 3 */}
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-[#22D3EE]/40 transition-all cursor-pointer">
+              <div className="p-3 sm:p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-[#22D3EE]/40 transition-all cursor-pointer">
                 <div className="flex items-center justify-between text-xs font-semibold text-white mb-1">
-                  <span className="flex items-center gap-1.5 text-[#22D3EE]">
-                    <CheckCircle2 className="w-3.5 h-3.5" /> Packaging Supplier Certified
+                  <span className="flex items-center gap-1.5 text-[#22D3EE] truncate">
+                    <CheckCircle2 className="w-3.5 h-3.5 shrink-0" /> Packaging Supplier Certified
                   </span>
-                  <span className="text-[10px] font-mono text-cyan-300 bg-cyan-500/10 px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-mono text-cyan-300 bg-cyan-500/10 px-2 py-0.5 rounded shrink-0">
                     Verified
                   </span>
                 </div>
@@ -280,10 +286,10 @@ export const DashboardPage = () => {
           </div>
 
           <div className="mt-4 pt-3 border-t border-white/[0.08] flex items-center justify-between text-xs">
-            <span className="text-slate-400">FastAPI Model: Pareto v2.4</span>
+            <span className="text-slate-400 text-[11px]">FastAPI Model: Pareto v2.4</span>
             <button
               onClick={() => navigate('/app/optimizer')}
-              className="text-[#00E5A0] hover:underline flex items-center gap-1"
+              className="text-[#00E5A0] hover:underline flex items-center gap-1 text-xs"
             >
               Run Sourcing Audit <ArrowRight className="w-3 h-3" />
             </button>
@@ -292,10 +298,10 @@ export const DashboardPage = () => {
       </div>
 
       {/* Recent Multi-Supplier Orders Table */}
-      <GlassCard glowColor="cyan" className="p-6">
+      <GlassCard glowColor="cyan" className="p-4 sm:p-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
           <div>
-            <h3 className="text-base font-semibold text-white">Recent Multi-Supplier Purchase Orders</h3>
+            <h3 className="text-sm sm:text-base font-semibold text-white">Recent Multi-Supplier Purchase Orders</h3>
             <p className="text-xs text-slate-400">
               Orders automatically split, audited, and tracked across diversified suppliers.
             </p>
@@ -309,8 +315,8 @@ export const DashboardPage = () => {
           </PillButton>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+        <div className="overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+          <table className="w-full text-left text-xs min-w-[620px]">
             <thead>
               <tr className="border-b border-white/[0.08] text-slate-400 font-mono">
                 <th className="pb-3 font-medium">Order ID</th>

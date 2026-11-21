@@ -80,7 +80,7 @@ export const SettingsPage = () => {
       )}
 
       {/* Tabs */}
-      <div className="flex border-b border-white/[0.08] gap-4 text-xs font-medium">
+      <div className="flex border-b border-white/[0.08] gap-4 text-xs font-medium overflow-x-auto no-scrollbar whitespace-nowrap pb-1">
         {[
           { id: 'integrations', label: 'ERP & Store Integrations' },
           { id: 'engine', label: 'FastAPI AI Engine' },

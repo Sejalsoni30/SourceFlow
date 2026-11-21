@@ -39,12 +39,12 @@ export const HeroCanvas = () => {
     const getCenterNode = () => ({
       x: width * 0.5,
       y: height * 0.48,
-      radius: 14,
-      glowRadius: 40,
+      radius: width < 640 ? 10 : 14,
+      glowRadius: width < 640 ? 28 : 40,
     });
 
-    // Supplier Nodes
-    const nodeCount = Math.min(32, Math.max(16, Math.floor(width / 40)));
+    // Supplier Nodes (scaled down slightly on small devices for better battery & frame rates)
+    const nodeCount = Math.min(32, Math.max(12, Math.floor(width / 45)));
     const nodes = [];
 
     const colors = [
@@ -55,7 +55,7 @@ export const HeroCanvas = () => {
 
     for (let i = 0; i < nodeCount; i++) {
       const angle = (i / nodeCount) * Math.PI * 2 + (Math.random() * 0.4);
-      const dist = 120 + Math.random() * (Math.min(width, height) * 0.42);
+      const dist = (width < 640 ? 80 : 120) + Math.random() * (Math.min(width, height) * (width < 640 ? 0.38 : 0.42));
       const color = colors[i % colors.length];
 
       nodes.push({
@@ -63,9 +63,9 @@ export const HeroCanvas = () => {
         baseDist: dist,
         x: width * 0.5 + Math.cos(angle) * dist,
         y: height * 0.48 + Math.sin(angle) * dist,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        radius: Math.random() * 3 + 2.5,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        radius: Math.random() * 2.5 + 2,
         color: color,
         pulseSpeed: 0.02 + Math.random() * 0.02,
         pulseOffset: Math.random() * Math.PI * 2,
@@ -74,13 +74,14 @@ export const HeroCanvas = () => {
     }
 
     // Streaming Data Packets traveling along connection lines
+    const packetCount = width < 640 ? 8 : 16;
     const packets = [];
-    for (let i = 0; i < 16; i++) {
+    for (let i = 0; i < packetCount; i++) {
       packets.push({
         nodeIndex: Math.floor(Math.random() * nodes.length),
         progress: Math.random(),
         speed: 0.004 + Math.random() * 0.006,
-        size: Math.random() * 2.5 + 2,
+        size: Math.random() * 2 + 1.5,
         color: Math.random() > 0.5 ? '#00E5A0' : '#22D3EE',
       });
     }
@@ -95,13 +96,13 @@ export const HeroCanvas = () => {
 
       // Draw subtle orbital guide rings
       ctx.save();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.025)';
       ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.arc(center.x, center.y, 160, 0, Math.PI * 2);
+      ctx.arc(center.x, center.y, width < 640 ? 100 : 160, 0, Math.PI * 2);
       ctx.stroke();
       ctx.beginPath();
-      ctx.arc(center.x, center.y, 280, 0, Math.PI * 2);
+      ctx.arc(center.x, center.y, width < 640 ? 180 : 280, 0, Math.PI * 2);
       ctx.stroke();
       ctx.restore();
 
@@ -112,10 +113,10 @@ export const HeroCanvas = () => {
         node.y += node.vy;
 
         // Keep within bounds
-        if (node.x < 20 || node.x > width - 20) node.vx *= -1;
-        if (node.y < 20 || node.y > height - 20) node.vy *= -1;
+        if (node.x < 15 || node.x > width - 15) node.vx *= -1;
+        if (node.y < 15 || node.y > height - 15) node.vy *= -1;
 
-        // Mouse interaction
+        // Mouse interaction (on desktop)
         const dxMouse = node.x - mouse.x;
         const dyMouse = node.y - mouse.y;
         const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
@@ -128,8 +129,8 @@ export const HeroCanvas = () => {
         // Draw line to center if connected
         if (node.connectsToCenter) {
           const grad = ctx.createLinearGradient(node.x, node.y, center.x, center.y);
-          grad.addColorStop(0, `rgba(${node.color.r}, ${node.color.g}, ${node.color.b}, 0.22)`);
-          grad.addColorStop(1, 'rgba(0, 229, 160, 0.05)');
+          grad.addColorStop(0, `rgba(${node.color.r}, ${node.color.g}, ${node.color.b}, 0.2)`);
+          grad.addColorStop(1, 'rgba(0, 229, 160, 0.04)');
 
           ctx.strokeStyle = grad;
           ctx.lineWidth = 1;
@@ -145,8 +146,9 @@ export const HeroCanvas = () => {
           const dx = node.x - otherNode.x;
           const dy = node.y - otherNode.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 110) {
-            const alpha = (1 - dist / 110) * 0.15;
+          const maxDist = width < 640 ? 70 : 100;
+          if (dist < maxDist) {
+            const alpha = (1 - dist / maxDist) * 0.12;
             ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
             ctx.lineWidth = 0.75;
             ctx.beginPath();
@@ -158,11 +160,11 @@ export const HeroCanvas = () => {
 
         // Draw node dot
         const pulse = Math.sin(time * 2 + node.pulseOffset) * 0.5 + 0.5;
-        const currentRadius = node.radius + pulse * 1.5;
+        const currentRadius = node.radius + pulse * 1.2;
 
         // Outer glow
         const nodeGlow = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, currentRadius * 3);
-        nodeGlow.addColorStop(0, `rgba(${node.color.r}, ${node.color.g}, ${node.color.b}, 0.6)`);
+        nodeGlow.addColorStop(0, `rgba(${node.color.r}, ${node.color.g}, ${node.color.b}, 0.5)`);
         nodeGlow.addColorStop(1, `rgba(${node.color.r}, ${node.color.g}, ${node.color.b}, 0)`);
         ctx.fillStyle = nodeGlow;
         ctx.beginPath();
@@ -192,7 +194,7 @@ export const HeroCanvas = () => {
 
         ctx.fillStyle = p.color;
         ctx.shadowColor = p.color;
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 6;
         ctx.beginPath();
         ctx.arc(px, py, p.size, 0, Math.PI * 2);
         ctx.fill();
@@ -200,14 +202,13 @@ export const HeroCanvas = () => {
       });
 
       // Draw Central SourceFlow Core
-      // Outer pulse halo
-      const corePulse = Math.sin(time * 2.5) * 6;
+      const corePulse = Math.sin(time * 2.5) * 4;
       const coreGrad = ctx.createRadialGradient(
         center.x, center.y, 0,
         center.x, center.y, center.glowRadius + corePulse
       );
-      coreGrad.addColorStop(0, 'rgba(0, 229, 160, 0.45)');
-      coreGrad.addColorStop(0.5, 'rgba(34, 211, 238, 0.2)');
+      coreGrad.addColorStop(0, 'rgba(0, 229, 160, 0.4)');
+      coreGrad.addColorStop(0.5, 'rgba(34, 211, 238, 0.15)');
       coreGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
       ctx.fillStyle = coreGrad;
@@ -217,11 +218,11 @@ export const HeroCanvas = () => {
 
       // Center ring
       ctx.strokeStyle = '#00E5A0';
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 1.5;
       ctx.shadowColor = '#00E5A0';
-      ctx.shadowBlur = 14;
+      ctx.shadowBlur = 10;
       ctx.beginPath();
-      ctx.arc(center.x, center.y, center.radius + 3, 0, Math.PI * 2);
+      ctx.arc(center.x, center.y, center.radius + 2, 0, Math.PI * 2);
       ctx.stroke();
 
       // Solid central core
@@ -254,7 +255,7 @@ export const HeroCanvas = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-auto opacity-75"
+      className="absolute inset-0 w-full h-full pointer-events-none md:pointer-events-auto opacity-75"
     />
   );
 };

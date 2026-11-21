@@ -4,10 +4,10 @@ import { Cpu, ShieldCheck, Activity, Globe, Share2 } from 'lucide-react';
 
 export const Footer = () => {
   return (
-    <footer className="relative border-t border-white/[0.08] bg-[#030508] pt-16 pb-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+    <footer className="relative border-t border-white/[0.08] bg-[#030508] pt-12 sm:pt-16 pb-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 mb-12">
         {/* Brand Col */}
-        <div className="col-span-2">
+        <div className="sm:col-span-2">
           <Link to="/" className="flex items-center gap-2.5 mb-4 group">
             <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#00E5A0] via-[#22D3EE] to-[#8B5CF6] p-[1.5px] shadow-[0_0_15px_rgba(0,229,160,0.3)]">
               <div className="w-full h-full rounded-full bg-[#05070A] flex items-center justify-center">

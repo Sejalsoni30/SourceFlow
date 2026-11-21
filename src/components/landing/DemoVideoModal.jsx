@@ -57,34 +57,34 @@ export const DemoVideoModal = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-4xl">
+      <div className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto no-scrollbar">
         <GlassCard
           glowColor="emerald"
           hoverEffect={false}
-          className="p-6 sm:p-8 bg-[#090D14]/95 border-white/20 shadow-2xl relative"
+          className="p-4 sm:p-8 bg-[#090D14]/95 border-white/20 shadow-2xl relative"
         >
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-5 right-5 p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-colors"
+            className="absolute top-4 right-4 sm:top-5 sm:right-5 p-1.5 sm:p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
 
           {/* Modal Header */}
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-3 sm:mb-4">
             <span className="w-2.5 h-2.5 rounded-full bg-[#00E5A0] animate-pulse" />
-            <span className="text-xs font-mono uppercase tracking-wider text-[#00E5A0]">
+            <span className="text-[11px] sm:text-xs font-mono uppercase tracking-wider text-[#00E5A0]">
               Interactive Product Walkthrough
             </span>
           </div>
 
-          <h3 className="text-2xl font-bold text-white mb-6">
+          <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 pr-8">
             Watch SourceFlow in Action
           </h3>
 
           {/* Walkthrough Stage */}
-          <div className="p-6 rounded-2xl bg-black/70 border border-white/10 relative overflow-hidden min-h-[260px] flex flex-col justify-between">
+          <div className="p-4 sm:p-6 rounded-2xl bg-black/70 border border-white/10 relative overflow-hidden min-h-[240px] sm:min-h-[260px] flex flex-col justify-between">
             {/* Top progress bar */}
             <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/10">
               <span className="text-xs font-mono px-2 py-0.5 rounded bg-[#00E5A0]/20 text-[#00E5A0] border border-[#00E5A0]/30">

@@ -257,8 +257,8 @@ export const SuppliersPage = () => {
 
       {/* Table View */}
       {viewMode === 'table' && (
-        <GlassCard hoverEffect={false} className="p-4 overflow-x-auto">
-          <table className="w-full text-left text-xs">
+        <GlassCard hoverEffect={false} className="p-4 overflow-x-auto no-scrollbar">
+          <table className="w-full text-left text-xs min-w-[650px]">
             <thead>
               <tr className="border-b border-white/[0.08] text-slate-400 font-mono">
                 <th className="pb-3 font-medium">Vendor</th>
