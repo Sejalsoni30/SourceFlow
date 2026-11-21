@@ -63,25 +63,22 @@ export const DashboardPage = () => {
   return (
     <div className="space-y-6 sm:space-y-8">
       {/* Top Greeting & Action Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-3 border-b border-white/[0.05]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 text-[11px] font-mono text-slate-300 mb-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00E5A0] animate-pulse" />
-            <span>Apex Hardware Co. • Live Telemetry</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-normal tracking-tight text-white leading-tight">
-            Procurement Intelligence & <span className="font-serif italic text-gradient-emerald font-normal">Multi-Sourcing</span>
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-tight">
+            Procurement Intelligence & Multi-Sourcing
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl leading-relaxed">
-            Real-time status across 18 connected suppliers, 7 active multi-vendor orders, and autonomous risk hedging.
+          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            Real-time status across 18 connected suppliers and 7 active multi-vendor orders.
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
           <PillButton
             variant="secondary"
             size="sm"
             onClick={() => navigate('/app/simulator')}
+            className="flex-1 sm:flex-initial"
           >
             What-If Test
           </PillButton>
@@ -89,6 +86,7 @@ export const DashboardPage = () => {
             variant="primary"
             size="sm"
             onClick={() => navigate('/app/optimizer')}
+            className="flex-1 sm:flex-initial"
           >
             Optimize New Order
           </PillButton>

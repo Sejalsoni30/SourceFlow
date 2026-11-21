@@ -22,14 +22,16 @@ export const AppLayout = () => {
 
       {/* Main Content Area: Independent smooth scrolling while sidebar stays fixed */}
       <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto overflow-x-hidden relative z-10 scroll-smooth">
-        {/* Sticky App Header */}
-        <AppNavbar
-          onOpenMobileSidebar={() => setIsMobileSidebarOpen(true)}
-          onOpenSearch={() => setIsSearchOpen(true)}
-        />
+        {/* Floating App Header Wrapper with top margin */}
+        <div className="sticky top-0 z-30 pt-3 sm:pt-4 px-3 sm:px-6 lg:px-8 pointer-events-none">
+          <AppNavbar
+            onOpenMobileSidebar={() => setIsMobileSidebarOpen(true)}
+            onOpenSearch={() => setIsSearchOpen(true)}
+          />
+        </div>
 
         {/* Dynamic Route Content */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto pb-16">
+        <main className="flex-1 p-3 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto pb-16">
           <Outlet />
         </main>
       </div>

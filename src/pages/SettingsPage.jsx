@@ -45,25 +45,27 @@ export const SettingsPage = () => {
   return (
     <div className="space-y-8">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-3 border-b border-white/[0.05]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.06] border border-white/10 text-[11px] font-mono text-slate-300 mb-2">
-            <Settings className="w-3.5 h-3.5 text-slate-300" />
-            <span>Platform Configuration</span>
-            <span className="text-slate-600">•</span>
-            <span className="text-slate-400">APIs & Integrations</span>
+          <div className="flex items-center gap-2">
+            <span className="p-1.5 rounded-lg bg-white/[0.05] text-slate-300 border border-white/10">
+              <Settings className="w-4 h-4" />
+            </span>
+            <span className="text-xs font-mono uppercase tracking-wider text-slate-400">
+              Platform Configuration
+            </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-normal tracking-tight text-white leading-tight">
-            Workspace & <span className="font-serif italic text-gradient-brand font-normal">Integration Settings</span>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mt-1">
+            Workspace & Integration Settings
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl leading-relaxed">
-            Configure automated ERP data synchronization, FastAPI optimizer models, webhooks, and secure API keys.
+          <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+            Configure ERP data synchronization, FastAPI optimizer models, webhooks, and API keys.
           </p>
         </div>
 
         <PillButton
           variant="primary"
-          size="md"
+          size="sm"
           onClick={handleSave}
         >
           Save Changes
