@@ -53,17 +53,21 @@ export const SuppliersPage = () => {
   return (
     <div className="space-y-6">
       {/* Page Title & Add Supplier CTA */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-3 border-b border-white/[0.05]">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-            Suppliers Directory & Intelligence
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 text-[11px] font-mono text-slate-300 mb-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00E5A0]" />
+            <span>18 Certified Vendors • Continuous Audits</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-normal tracking-tight text-white leading-tight">
+            Suppliers Directory & <span className="font-serif italic text-gradient-brand font-normal">Intelligence</span>
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl leading-relaxed">
             Audited supplier rate cards, reliability metrics, and live geopolitical risk tracking.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5 shrink-0">
           {/* View Mode Toggle */}
           <div className="p-1 rounded-xl bg-white/[0.04] border border-white/10 flex items-center gap-1">
             <button

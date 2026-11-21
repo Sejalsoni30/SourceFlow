@@ -76,20 +76,16 @@ export const SimulatorPage = () => {
   return (
     <div className="space-y-8">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-3 border-b border-white/[0.05]">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-lg bg-[#22D3EE]/10 text-[#22D3EE] border border-[#22D3EE]/20">
-              <SlidersHorizontal className="w-4 h-4" />
-            </span>
-            <span className="text-xs font-mono uppercase tracking-wider text-[#22D3EE]">
-              Stress-Testing Sandbox
-            </span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#22D3EE]/10 border border-[#22D3EE]/25 text-[11px] font-mono text-[#22D3EE] mb-2 shadow-[0_0_12px_rgba(34,211,238,0.1)]">
+            <SlidersHorizontal className="w-3.5 h-3.5 text-[#22D3EE]" />
+            <span>Stress-Testing Sandbox • Monte Carlo</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mt-1">
-            What-If Supply Chain Simulator
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-normal tracking-tight text-white leading-tight">
+            What-If Supply Chain <span className="font-serif italic text-gradient-brand font-normal">Simulator</span>
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+          <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl leading-relaxed">
             Simulate black-swan disruptions, price shocks, and port strikes. Contrast fragile single-vendor outcomes vs. SourceFlow multi-supplier hedges.
           </p>
         </div>
@@ -99,7 +95,7 @@ export const SimulatorPage = () => {
             setSelectedScenario('force_majeure');
             setIntensity(60);
           }}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-xs text-slate-400 hover:text-white transition-all w-fit"
+          className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-xs font-mono text-slate-400 hover:text-white transition-all w-fit shrink-0"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           <span>Reset Simulation</span>

@@ -56,27 +56,25 @@ export const OrdersPage = () => {
   return (
     <div className="space-y-8">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-3 border-b border-white/[0.05]">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-lg bg-[#8B5CF6]/10 text-[#8B5CF6] border border-[#8B5CF6]/20">
-              <ShoppingBag className="w-4 h-4" />
-            </span>
-            <span className="text-xs font-mono uppercase tracking-wider text-[#8B5CF6]">
-              Order Fulfillment Ledger
-            </span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8B5CF6]/10 border border-[#8B5CF6]/25 text-[11px] font-mono text-[#8B5CF6] shadow-[0_0_15px_rgba(139,92,246,0.1)] mb-2">
+            <ShoppingBag className="w-3.5 h-3.5 text-[#8B5CF6]" />
+            <span>Fulfillment Ledger</span>
+            <span className="text-slate-600">•</span>
+            <span className="text-slate-400">Multi-Vendor Dispatch</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mt-1">
-            Purchase Orders & Multi-Vendor Tracking
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-normal tracking-tight text-white leading-tight">
+            Purchase Orders & <span className="font-serif italic text-gradient-brand font-normal">Tracking</span>
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
-            Audit splits, track distributed shipments across ports, and verify realized cost savings.
+          <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl leading-relaxed">
+            Audit multi-vendor splits, track distributed shipments across active sea lanes, and verify realized cost savings.
           </p>
         </div>
 
         <PillButton
-          variant="primary"
-          size="sm"
+          variant="gradient"
+          size="md"
           onClick={() => navigate('/app/optimizer')}
         >
           Optimize New Order

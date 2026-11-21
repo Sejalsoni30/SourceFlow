@@ -6,11 +6,12 @@ import {
   Search,
   Bell,
   Sparkles,
-  Command,
   Plus,
+  ChevronRight,
   ShieldCheck,
   CheckCircle2,
-  X
+  X,
+  Activity
 } from 'lucide-react';
 
 export const AppNavbar = ({ onOpenMobileSidebar, onOpenSearch }) => {
@@ -18,36 +19,40 @@ export const AppNavbar = ({ onOpenMobileSidebar, onOpenSearch }) => {
   const navigate = useNavigate();
   const [notificationOpen, setNotificationOpen] = useState(false);
 
-  // Map route to breadcrumb label
+  // Clean, concise breadcrumb label mapping
   const routeNames = {
     '/app': 'Dashboard Overview',
     '/app/dashboard': 'Dashboard Overview',
-    '/app/suppliers': 'Suppliers Directory & Audits',
-    '/app/optimizer': 'Order Split Optimizer Studio',
-    '/app/simulator': 'What-If Stress Simulator',
+    '/app/suppliers': 'Suppliers Directory',
+    '/app/optimizer': 'Optimizer Studio',
+    '/app/simulator': 'What-If Simulator',
     '/app/risk': 'Global Risk Radar',
-    '/app/orders': 'Purchase Orders & Logistics',
-    '/app/settings': 'Workspace & API Settings',
+    '/app/orders': 'Orders & Logistics',
+    '/app/settings': 'Settings & Webhooks',
   };
 
+  const isOptimizerPage = location.pathname === '/app/optimizer';
   const currentTitle = routeNames[location.pathname] || 'Workspace';
 
   return (
-    <header className="sticky top-0 z-30 h-16 bg-[#05070A]/85 backdrop-blur-xl border-b border-white/[0.08] px-3 sm:px-6 flex items-center justify-between">
+    <header className="sticky top-0 z-30 h-14 sm:h-16 bg-[#05070A]/75 backdrop-blur-2xl border-b border-white/[0.06] px-3 sm:px-6 flex items-center justify-between shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
       {/* Left Breadcrumb & Mobile Menu */}
-      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+      <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
         <button
           onClick={onOpenMobileSidebar}
-          className="md:hidden p-2 rounded-xl bg-white/[0.04] border border-white/10 text-slate-300 hover:text-white shrink-0"
+          className="md:hidden p-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-slate-300 hover:text-white shrink-0 transition-colors"
           aria-label="Open Navigation Menu"
         >
           <Menu className="w-4 h-4" />
         </button>
 
-        <div className="flex items-center gap-1.5 sm:gap-2 text-xs min-w-0">
-          <span className="text-slate-500 hidden sm:inline">SourceFlow</span>
-          <span className="text-slate-600 hidden sm:inline">/</span>
-          <span className="font-medium text-white tracking-wide truncate max-w-[170px] sm:max-w-none">
+        <div className="flex items-center gap-2 text-xs min-w-0">
+          <span className="text-slate-400 font-medium hidden sm:flex items-center gap-1.5 shrink-0">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00E5A0]" />
+            Apex Hardware Co.
+          </span>
+          <ChevronRight className="w-3.5 h-3.5 text-slate-600 hidden sm:inline shrink-0" />
+          <span className="font-semibold text-slate-100 tracking-wide truncate max-w-[170px] sm:max-w-none">
             {currentTitle}
           </span>
         </div>
@@ -57,13 +62,13 @@ export const AppNavbar = ({ onOpenMobileSidebar, onOpenSearch }) => {
       <div className="hidden lg:flex items-center">
         <button
           onClick={onOpenSearch}
-          className="flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.07] border border-white/[0.08] text-xs text-slate-400 hover:text-white transition-all w-72 justify-between"
+          className="flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/20 text-xs text-slate-400 hover:text-white transition-all w-72 justify-between shadow-inner"
         >
           <span className="flex items-center gap-2">
             <Search className="w-3.5 h-3.5 text-slate-400" />
-            <span>Search suppliers, SKUs, POs...</span>
+            <span className="text-slate-400">Search suppliers, SKUs, POs...</span>
           </span>
-          <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-[10px] font-mono text-slate-300">
+          <kbd className="px-1.5 py-0.5 rounded bg-white/[0.08] border border-white/10 text-[10px] font-mono text-slate-300">
             ⌘K
           </kbd>
         </button>
@@ -72,7 +77,7 @@ export const AppNavbar = ({ onOpenMobileSidebar, onOpenSearch }) => {
       {/* Right Controls */}
       <div className="flex items-center gap-2 sm:gap-3 shrink-0">
         {/* System Health Badge */}
-        <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00E5A0]/10 border border-[#00E5A0]/20 text-[11px] font-mono text-[#00E5A0]">
+        <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00E5A0]/10 border border-[#00E5A0]/25 text-[11px] font-mono text-[#00E5A0] shadow-[0_0_12px_rgba(0,229,160,0.1)]">
           <span className="w-1.5 h-1.5 rounded-full bg-[#00E5A0] animate-pulse" />
           <span>FastAPI Live</span>
         </div>
@@ -80,7 +85,7 @@ export const AppNavbar = ({ onOpenMobileSidebar, onOpenSearch }) => {
         {/* Search icon on mobile */}
         <button
           onClick={onOpenSearch}
-          className="lg:hidden p-2 rounded-full bg-white/[0.04] border border-white/10 text-slate-300 hover:text-white"
+          className="lg:hidden p-2 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-slate-300 hover:text-white transition-colors"
           aria-label="Search"
         >
           <Search className="w-4 h-4" />
@@ -159,17 +164,24 @@ export const AppNavbar = ({ onOpenMobileSidebar, onOpenSearch }) => {
           )}
         </div>
 
-        {/* Quick New Optimization Button */}
-        <PillButton
-          variant="primary"
-          size="sm"
-          onClick={() => navigate('/app/optimizer')}
-          iconComponent={Plus}
-          className="shadow-sm text-xs px-2.5 py-1.5 sm:px-4 sm:py-2"
-        >
-          <span className="hidden sm:inline">New Optimization</span>
-          <span className="sm:hidden">Optimize</span>
-        </PillButton>
+        {/* Action Button: Show "+ New Optimization" only when on OTHER pages */}
+        {!isOptimizerPage ? (
+          <PillButton
+            variant="primary"
+            size="sm"
+            onClick={() => navigate('/app/optimizer')}
+            iconComponent={Plus}
+            className="shadow-sm text-xs px-2.5 py-1.5 sm:px-4 sm:py-2"
+          >
+            <span className="hidden sm:inline">New Optimization</span>
+            <span className="sm:hidden">Optimize</span>
+          </PillButton>
+        ) : (
+          <div className="hidden sm:inline-flex items-center gap-1.5 text-[11px] font-mono text-slate-300 bg-white/[0.04] border border-white/10 px-3 py-1.5 rounded-full">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#22D3EE] animate-pulse" />
+            <span>Studio Active</span>
+          </div>
+        )}
       </div>
     </header>
   );

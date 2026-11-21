@@ -42,28 +42,24 @@ export const RiskCenterPage = () => {
   return (
     <div className="space-y-8">
       {/* Page Title */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-3 border-b border-white/[0.05]">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20">
-              <ShieldAlert className="w-4 h-4" />
-            </span>
-            <span className="text-xs font-mono uppercase tracking-wider text-rose-400">
-              24/7 Supply Chain Radar
-            </span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/25 text-[11px] font-mono text-rose-300 mb-2 shadow-[0_0_12px_rgba(244,63,94,0.1)]">
+            <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />
+            <span>24/7 Supply Chain Radar • Satellite Feeds</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mt-1">
-            Global Risk & Disruption Center
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-normal tracking-tight text-white leading-tight">
+            Global Risk & <span className="font-serif italic text-gradient-brand font-normal">Disruption Center</span>
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+          <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl leading-relaxed">
             Real-time feed of maritime choke points, raw material surges, and automated backup routing.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-xs font-mono text-slate-300">
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-xs font-mono text-slate-300">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <span>Radar Scanning: 14 Global Ports</span>
+            <span>Scanning 14 Global Ports</span>
           </span>
         </div>
       </div>
