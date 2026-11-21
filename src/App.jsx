@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { LandingPage } from './pages/LandingPage';
+import { LegalPage } from './pages/LegalPage';
 import { AppLayout } from './components/app/AppLayout';
 import { DashboardPage } from './pages/DashboardPage';
 import { SuppliersPage } from './pages/SuppliersPage';
@@ -16,6 +17,12 @@ export default function App() {
       <Routes>
         {/* Landing Page */}
         <Route path="/" element={<LandingPage />} />
+
+        {/* Legal, Privacy & Trust Center */}
+        <Route path="/privacy" element={<LegalPage />} />
+        <Route path="/terms" element={<LegalPage />} />
+        <Route path="/trust" element={<LegalPage />} />
+        <Route path="/security" element={<LegalPage />} />
 
         {/* Core App Shell */}
         <Route path="/app" element={<AppLayout />}>

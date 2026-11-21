@@ -1,10 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Cpu, ShieldCheck, Activity, Globe, Share2 } from 'lucide-react';
+import { Cpu, ShieldCheck, Activity, Globe, Share2, CheckCircle2, Code2, ExternalLink } from 'lucide-react';
+import { LegalModal } from '../common/LegalModal';
+import { ApiDocsModal } from '../common/ApiDocsModal';
 
 export const Footer = () => {
+  const [legalModalOpen, setLegalModalOpen] = useState(false);
+  const [legalTab, setLegalTab] = useState('privacy');
+  const [apiDocsOpen, setApiDocsOpen] = useState(false);
+  const [integrationToast, setIntegrationToast] = useState(null);
+
+  const openLegal = (tab, e) => {
+    if (e && (!e.metaKey && !e.ctrlKey && !e.shiftKey && e.button === 0)) {
+      e.preventDefault();
+    }
+    setLegalTab(tab);
+    setLegalModalOpen(true);
+  };
+
+  const handleIntegrationClick = (name) => {
+    setIntegrationToast(`${name} integration connector available on Enterprise tier.`);
+    setTimeout(() => {
+      setIntegrationToast(null);
+    }, 3200);
+  };
+
   return (
     <footer className="relative border-t border-white/[0.08] bg-[#030508] pt-12 sm:pt-16 pb-12 px-4 sm:px-6 lg:px-8">
+      {/* Integration Toast Notification */}
+      {integrationToast && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-[#090D15] border border-[#00E5A0]/30 shadow-2xl text-xs text-white animate-in slide-in-from-bottom duration-300">
+          <CheckCircle2 className="w-4 h-4 text-[#00E5A0] shrink-0" />
+          <span>{integrationToast}</span>
+        </div>
+      )}
+
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 mb-12">
         {/* Brand Col */}
         <div className="sm:col-span-2">
@@ -68,11 +98,17 @@ export const Footer = () => {
             Integrations
           </h4>
           <ul className="space-y-2.5 text-xs text-slate-400">
-            <li><span className="hover:text-white transition-colors cursor-pointer">QuickBooks Online</span></li>
-            <li><span className="hover:text-white transition-colors cursor-pointer">Oracle NetSuite</span></li>
-            <li><span className="hover:text-white transition-colors cursor-pointer">Shopify Plus</span></li>
-            <li><span className="hover:text-white transition-colors cursor-pointer">SAP Business One</span></li>
-            <li><span className="hover:text-white transition-colors cursor-pointer">FastAPI REST Webhooks</span></li>
+            {['QuickBooks Online', 'Oracle NetSuite', 'Shopify Plus', 'SAP Business One', 'FastAPI REST Webhooks'].map((name) => (
+              <li key={name}>
+                <button
+                  type="button"
+                  onClick={() => handleIntegrationClick(name)}
+                  className="hover:text-white transition-colors text-left"
+                >
+                  {name}
+                </button>
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -85,22 +121,71 @@ export const Footer = () => {
             <li><a href="#how-it-works" className="hover:text-white transition-colors">Methodology & Math</a></li>
             <li><a href="#pricing" className="hover:text-white transition-colors">Pricing Plans</a></li>
             <li><a href="#live-demo" className="hover:text-white transition-colors">Interactive Demo</a></li>
-            <li><span className="hover:text-white transition-colors cursor-pointer">API Documentation</span></li>
-            <li><span className="hover:text-white transition-colors cursor-pointer">Security & SOC-2</span></li>
+            <li>
+              <button
+                type="button"
+                onClick={() => setApiDocsOpen(true)}
+                className="hover:text-[#22D3EE] transition-colors flex items-center gap-1.5 text-left"
+              >
+                <span>API Documentation</span>
+                <span className="px-1.5 py-0.2 rounded bg-[#22D3EE]/10 text-[#22D3EE] text-[9px] font-mono">v2.4</span>
+              </button>
+            </li>
+            <li>
+              <Link
+                to="/trust"
+                onClick={(e) => openLegal('trust', e)}
+                className="hover:text-[#00E5A0] transition-colors flex items-center gap-1.5"
+              >
+                <span>Security & SOC-2</span>
+                <ShieldCheck className="w-3 h-3 text-[#00E5A0]" />
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
 
+      {/* Bottom Bar with Privacy Policy, Terms of Service, Trust Center */}
       <div className="max-w-7xl mx-auto pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
         <div>
           © {new Date().getFullYear()} SourceFlow AI Technologies Inc. All rights reserved.
         </div>
         <div className="flex items-center gap-6">
-          <span className="hover:text-slate-300 transition-colors cursor-pointer">Privacy Policy</span>
-          <span className="hover:text-slate-300 transition-colors cursor-pointer">Terms of Service</span>
-          <span className="hover:text-slate-300 transition-colors cursor-pointer">Trust Center</span>
+          <Link
+            to="/privacy"
+            onClick={(e) => openLegal('privacy', e)}
+            className="hover:text-[#00E5A0] text-slate-300 transition-colors cursor-pointer"
+          >
+            Privacy Policy
+          </Link>
+          <Link
+            to="/terms"
+            onClick={(e) => openLegal('terms', e)}
+            className="hover:text-[#00E5A0] text-slate-300 transition-colors cursor-pointer"
+          >
+            Terms of Service
+          </Link>
+          <Link
+            to="/trust"
+            onClick={(e) => openLegal('trust', e)}
+            className="hover:text-[#00E5A0] text-slate-300 transition-colors cursor-pointer"
+          >
+            Trust Center
+          </Link>
         </div>
       </div>
+
+      {/* Modals */}
+      <LegalModal
+        isOpen={legalModalOpen}
+        onClose={() => setLegalModalOpen(false)}
+        initialTab={legalTab}
+      />
+
+      <ApiDocsModal
+        isOpen={apiDocsOpen}
+        onClose={() => setApiDocsOpen(false)}
+      />
     </footer>
   );
 };
