@@ -8,6 +8,7 @@ import {
   MOCK_RISK_ALERTS,
   MOCK_HISTORICAL_SPEND
 } from '../data/mockData';
+import { normalizeWeights } from '../utils/validation';
 
 // Simulated realistic network latency helper
 const sleep = (ms = 400) => new Promise(resolve => setTimeout(resolve, ms));
@@ -113,15 +114,18 @@ export const api = {
       product.eligibleSupplierIds.includes(s.id)
     );
 
+    const safeWeights = normalizeWeights(weights);
+    const safeUnits = Math.max(1, Number(units) || 100);
+
     // Compute dynamic fit score based on client-configured weights
     const scoredCandidates = candidateSuppliers.map(s => {
       const normScore = (
-        (s.priceScore * weights.price) +
-        (s.speedScore * weights.delivery) +
-        (s.qualityScore * weights.quality) +
-        (s.reliabilityScore * weights.reliability) +
-        (s.riskScore * weights.risk)
-      ) / (weights.price + weights.delivery + weights.quality + weights.reliability + weights.risk);
+        (s.priceScore * safeWeights.price) +
+        (s.speedScore * safeWeights.delivery) +
+        (s.qualityScore * safeWeights.quality) +
+        (s.reliabilityScore * safeWeights.reliability) +
+        (s.riskScore * safeWeights.risk)
+      ) / safeWeights.total;
 
       return {
         ...s,
@@ -138,13 +142,13 @@ export const api = {
     // Compute optimal split ratio
     // If delivery is paramount or risk is heavily weighted, split tilts to lower risk / faster
     let primaryRatio = 0.62;
-    if (weights.risk > 30) primaryRatio = 0.52; // more balanced to minimize single-vendor exposure
-    if (weights.price > 50) primaryRatio = 0.72; // tilt towards cheapest
+    if (safeWeights.risk > 30) primaryRatio = 0.52; // more balanced to minimize single-vendor exposure
+    if (safeWeights.price > 50) primaryRatio = 0.72; // tilt towards cheapest
 
     const secondaryRatio = 1 - primaryRatio;
 
-    const primaryUnits = Math.round(units * primaryRatio);
-    const secondaryUnits = units - primaryUnits;
+    const primaryUnits = Math.round(safeUnits * primaryRatio);
+    const secondaryUnits = safeUnits - primaryUnits;
 
     const primaryUnitPrice = product.baseUnitPrice * primary.unitPriceMultiplier;
     const secondaryUnitPrice = product.baseUnitPrice * secondary.unitPriceMultiplier;
@@ -154,7 +158,7 @@ export const api = {
     const totalOptimizedCost = primaryCost + secondaryCost;
 
     // Single supplier worst/baseline cost (if 100% went to expensive/standard supplier)
-    const singleSupplierBaselineCost = Math.round(units * (product.baseUnitPrice * 1.14));
+    const singleSupplierBaselineCost = Math.round(safeUnits * (product.baseUnitPrice * 1.14));
     const savingsAmount = singleSupplierBaselineCost - totalOptimizedCost;
     const savingsPercent = Number(((savingsAmount / singleSupplierBaselineCost) * 100).toFixed(1));
 
