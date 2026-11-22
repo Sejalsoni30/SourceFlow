@@ -4,23 +4,15 @@ import { PillButton } from '../components/common/PillButton';
 import { ScoreRing } from '../components/common/ScoreRing';
 import { MOCK_PRODUCTS } from '../data/mockData';
 import { api } from '../services/api';
+import { validateOptimizationInput } from '../utils/validation';
 import confetti from 'canvas-confetti';
 import {
   Cpu,
-  Sliders,
   Sparkles,
-  PieChart,
-  TrendingDown,
-  Clock,
-  ShieldCheck,
   CheckCircle2,
-  FileText,
   Send,
-  RotateCcw,
   AlertTriangle,
-  Zap,
-  Layers,
-  ArrowRight
+  AlertCircle
 } from 'lucide-react';
 
 export const OptimizerPage = () => {
@@ -42,9 +34,27 @@ export const OptimizerPage = () => {
   const [loadingPhase, setLoadingPhase] = useState('');
   const [optimizationResult, setOptimizationResult] = useState(null);
   const [committed, setCommitted] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
+  const [apiError, setApiError] = useState(null);
 
   // Selected product object
   const currentProduct = MOCK_PRODUCTS.find(p => p.id === selectedProductId) || MOCK_PRODUCTS[0];
+
+  const handleWeightChange = (key, value) => {
+    const nextWeights = { ...weights, [key]: Number(value) };
+    setWeights(nextWeights);
+    const total = Object.values(nextWeights).reduce((a, b) => a + (Number(b) || 0), 0);
+    if (total > 0 && validationErrors.weights) {
+      setValidationErrors(prev => {
+        const next = { ...prev };
+        delete next.weights;
+        return next;
+      });
+      if (apiError && !validationErrors.quantity && !validationErrors.deadlineDays) {
+        setApiError(null);
+      }
+    }
+  };
 
   // Presets
   const presets = [
@@ -54,7 +64,22 @@ export const OptimizerPage = () => {
     { name: 'Zero-Defect Quality', weights: { price: 15, delivery: 15, quality: 50, reliability: 15, risk: 5 } },
   ];
 
-  const handleRunOptimization = async () => {
+  const handleRunOptimization = async (customWeights = null) => {
+    const targetWeights = customWeights || weights;
+    const validation = validateOptimizationInput({
+      quantity,
+      deadlineDays,
+      weights: targetWeights,
+    });
+
+    if (!validation.isValid) {
+      setValidationErrors(validation.errors);
+      setApiError('Please resolve the highlighted order parameter errors before solving.');
+      return;
+    }
+
+    setValidationErrors({});
+    setApiError(null);
     setLoading(true);
     setCommitted(false);
 
@@ -72,21 +97,64 @@ export const OptimizerPage = () => {
         productId: selectedProductId,
         units: Number(quantity),
         deadlineDays: Number(deadlineDays),
-        weights,
+        weights: targetWeights,
         splitCount,
       });
       setOptimizationResult(res);
     } catch (err) {
       console.error('Optimization failed:', err);
+      setApiError('Pareto solver timed out or encountered an error. Please try again.');
     } finally {
       setLoading(false);
       setLoadingPhase('');
     }
   };
 
-  // Run on initial mount
+  // Run on initial mount and when target product changes
   useEffect(() => {
-    handleRunOptimization();
+    let isCancelled = false;
+    const initialRun = async () => {
+      const validation = validateOptimizationInput({
+        quantity,
+        deadlineDays,
+        weights,
+      });
+      if (!validation.isValid) return;
+
+      setLoading(true);
+      setCommitted(false);
+      setApiError(null);
+      setValidationErrors({});
+
+      try {
+        const res = await api.optimizeOrder({
+          productId: selectedProductId,
+          units: Number(quantity),
+          deadlineDays: Number(deadlineDays),
+          weights,
+          splitCount,
+        });
+        if (!isCancelled) {
+          setOptimizationResult(res);
+        }
+      } catch (err) {
+        if (!isCancelled) {
+          console.error('Initial optimization failed:', err);
+          setApiError('Unable to load initial optimization recommendation.');
+        }
+      } finally {
+        if (!isCancelled) {
+          setLoading(false);
+          setLoadingPhase('');
+        }
+      }
+    };
+
+    initialRun();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [selectedProductId]);
 
   const handleCommitOrder = () => {
@@ -151,6 +219,27 @@ export const OptimizerPage = () => {
               <span className="text-[10px] font-mono text-slate-400">SKU Specs</span>
             </div>
 
+            {/* Error Feedback Banner */}
+            {apiError && (
+              <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-300 text-xs flex items-start justify-between gap-2.5 animate-in fade-in duration-200">
+                <div className="flex items-start gap-2">
+                  <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-semibold text-rose-200">Validation Notice: </span>
+                    <span className="text-slate-300">{apiError}</span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setApiError(null)}
+                  className="text-rose-400 hover:text-white transition-colors text-xs font-mono px-1"
+                  aria-label="Dismiss error notification"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+
             {/* Select Product */}
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-slate-300">Target Product / Component</label>
@@ -177,13 +266,33 @@ export const OptimizerPage = () => {
                 <label className="text-xs font-medium text-slate-300">Total Units</label>
                 <input
                   type="number"
-                  min="100"
-                  max="100000"
+                  min="1"
+                  max="1000000"
                   step="100"
                   value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
-                  className="w-full bg-black/60 border border-white/15 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#00E5A0]/50"
+                  onChange={(e) => {
+                    setQuantity(e.target.value);
+                    if (validationErrors.quantity) {
+                      setValidationErrors(prev => {
+                        const next = { ...prev };
+                        delete next.quantity;
+                        return next;
+                      });
+                    }
+                    if (apiError) setApiError(null);
+                  }}
+                  className={`w-full bg-black/60 border rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none transition-colors ${
+                    validationErrors.quantity
+                      ? 'border-rose-500/60 focus:border-rose-500 bg-rose-950/20'
+                      : 'border-white/15 focus:border-[#00E5A0]/50'
+                  }`}
                 />
+                {validationErrors.quantity && (
+                  <div className="text-[11px] text-rose-400 font-mono flex items-center gap-1 mt-1">
+                    <AlertCircle className="w-3 h-3 shrink-0" />
+                    <span>{validationErrors.quantity}</span>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-1.5">
@@ -191,16 +300,36 @@ export const OptimizerPage = () => {
                 <div className="relative">
                   <input
                     type="number"
-                    min="2"
-                    max="60"
+                    min="1"
+                    max="365"
                     value={deadlineDays}
-                    onChange={(e) => setDeadlineDays(e.target.value)}
-                    className="w-full bg-black/60 border border-white/15 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#00E5A0]/50"
+                    onChange={(e) => {
+                      setDeadlineDays(e.target.value);
+                      if (validationErrors.deadlineDays) {
+                        setValidationErrors(prev => {
+                          const next = { ...prev };
+                          delete next.deadlineDays;
+                          return next;
+                        });
+                      }
+                      if (apiError) setApiError(null);
+                    }}
+                    className={`w-full bg-black/60 border rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none transition-colors ${
+                      validationErrors.deadlineDays
+                        ? 'border-rose-500/60 focus:border-rose-500 bg-rose-950/20'
+                        : 'border-white/15 focus:border-[#00E5A0]/50'
+                    }`}
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-slate-400 font-mono">
                     days
                   </span>
                 </div>
+                {validationErrors.deadlineDays && (
+                  <div className="text-[11px] text-rose-400 font-mono flex items-center gap-1 mt-1">
+                    <AlertCircle className="w-3 h-3 shrink-0" />
+                    <span>{validationErrors.deadlineDays}</span>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -214,7 +343,19 @@ export const OptimizerPage = () => {
                   <button
                     key={p.name}
                     type="button"
-                    onClick={() => setWeights(p.weights)}
+                    onClick={() => {
+                      setWeights(p.weights);
+                      if (validationErrors.weights) {
+                        setValidationErrors(prev => {
+                          const next = { ...prev };
+                          delete next.weights;
+                          return next;
+                        });
+                      }
+                      if (apiError && !validationErrors.quantity && !validationErrors.deadlineDays) {
+                        setApiError(null);
+                      }
+                    }}
                     className="px-3 py-2 rounded-xl text-left bg-white/[0.03] hover:bg-white/[0.07] border border-white/10 hover:border-[#00E5A0]/30 transition-all text-xs font-medium text-slate-300 hover:text-white"
                   >
                     {p.name}
@@ -241,7 +382,7 @@ export const OptimizerPage = () => {
                   min="0"
                   max="100"
                   value={weights.price}
-                  onChange={(e) => setWeights({ ...weights, price: Number(e.target.value) })}
+                  onChange={(e) => handleWeightChange('price', e.target.value)}
                   className="w-full accent-[#00E5A0] h-1.5 bg-white/10 rounded cursor-pointer"
                 />
               </div>
@@ -257,7 +398,7 @@ export const OptimizerPage = () => {
                   min="0"
                   max="100"
                   value={weights.delivery}
-                  onChange={(e) => setWeights({ ...weights, delivery: Number(e.target.value) })}
+                  onChange={(e) => handleWeightChange('delivery', e.target.value)}
                   className="w-full accent-[#22D3EE] h-1.5 bg-white/10 rounded cursor-pointer"
                 />
               </div>
@@ -273,7 +414,7 @@ export const OptimizerPage = () => {
                   min="0"
                   max="100"
                   value={weights.quality}
-                  onChange={(e) => setWeights({ ...weights, quality: Number(e.target.value) })}
+                  onChange={(e) => handleWeightChange('quality', e.target.value)}
                   className="w-full accent-[#8B5CF6] h-1.5 bg-white/10 rounded cursor-pointer"
                 />
               </div>
@@ -289,10 +430,17 @@ export const OptimizerPage = () => {
                   min="0"
                   max="100"
                   value={weights.risk}
-                  onChange={(e) => setWeights({ ...weights, risk: Number(e.target.value) })}
+                  onChange={(e) => handleWeightChange('risk', e.target.value)}
                   className="w-full accent-amber-400 h-1.5 bg-white/10 rounded cursor-pointer"
                 />
               </div>
+
+              {validationErrors.weights && (
+                <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs flex items-center gap-2">
+                  <AlertCircle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                  <span>{validationErrors.weights}</span>
+                </div>
+              )}
             </div>
 
             {/* Run Button */}
@@ -301,7 +449,7 @@ export const OptimizerPage = () => {
                 variant="primary"
                 size="lg"
                 loading={loading}
-                onClick={handleRunOptimization}
+                onClick={() => handleRunOptimization()}
                 className="w-full shadow-[0_0_25px_rgba(255,255,255,0.25)]"
               >
                 {loading ? 'Optimizing Split...' : 'Solve Optimal Order Split'}
@@ -478,6 +626,31 @@ export const OptimizerPage = () => {
                 </div>
               </GlassCard>
             </>
+          )}
+
+          {/* Fallback Empty/Error State */}
+          {!loading && !optimizationResult && (
+            <GlassCard hoverEffect={false} className="p-8 text-center space-y-4">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mx-auto">
+                <AlertTriangle className="w-6 h-6" />
+              </div>
+              <div>
+                <h4 className="text-base font-semibold text-white">No Optimization Solution Available</h4>
+                <p className="text-xs text-slate-400 max-w-sm mx-auto mt-1">
+                  {apiError || 'Please configure valid order parameters and priority weights, then click "Solve Optimal Order Split".'}
+                </p>
+              </div>
+              <div className="pt-2">
+                <PillButton
+                  variant="secondary"
+                  size="sm"
+                  icon={false}
+                  onClick={() => handleRunOptimization()}
+                >
+                  Retry Optimization
+                </PillButton>
+              </div>
+            </GlassCard>
           )}
         </div>
       </div>
